@@ -159,7 +159,7 @@ function MenuAndCart() {
 
         setIsFetchingDishes(true);
         const { data } = await axios.get(
-          "https://hotel-web-1.onrender.com/api/menu/dishes?page=1&limit=20",
+          "https://hotel-cqng.onrender.com/api/menu/dishes?page=1&limit=20",
           { timeout: 5000, signal: controller.signal }
         );
 
@@ -245,7 +245,7 @@ function MenuAndCart() {
       };
 
       const { data } = await axios.post(
-        "https://hotel-web-1.onrender.com/api/order/create-order",
+        "https://hotel-cqng.onrender.com/api/order/create-order",
         cartData,
         { timeout: 5000 }
       );
@@ -274,7 +274,7 @@ function MenuAndCart() {
     pollIntervalRef.current = setInterval(async () => {
       try {
         const { data } = await axios.get(
-          `https://hotel-web-1.onrender.com/api/order/status/${order_id}`,
+          `https://hotel-cqng.onrender.com/api/order/status/${order_id}`,
           { timeout: 2000 }
         );
 

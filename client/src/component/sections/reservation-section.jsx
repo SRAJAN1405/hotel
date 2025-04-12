@@ -136,7 +136,7 @@ export const ReservationSection = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.put(
-        "http://localhost:10000/api/table/book",
+        "https://hotel-cqng.onrender.com/api/table/book",
         formData
       );
       console.log("Reservation submitted successfully:", response.data);

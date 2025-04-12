@@ -1,7 +1,6 @@
 import axios from "axios";
 import Order from "../models/order.model.js"; // adjust this path as needed
 
-
 export const getAllSuccessOrders = async (req, res) => {
   try {
     const orders = await Order.find({ status: "confirmed" });
@@ -61,7 +60,7 @@ export const createOrder = async (req, res) => {
       },
       order_meta: {
         notify_url:
-          "https://hotel-web-1.onrender.com/api/order/cashfree-webhook",
+          "https://hotel-cqng.onrender.com/api/order/cashfree-webhook",
       },
     };
 

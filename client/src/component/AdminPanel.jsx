@@ -39,8 +39,8 @@ export const AdminPanel = () => {
       setIsLoading(true);
       try {
         const [ordersResponse, reservationsResponse] = await Promise.all([
-          axios.get("https://hotel-web-1.onrender.com/api/order"),
-          axios.get("https://hotel-web-1.onrender.com/api/table"),
+          axios.get("https://hotel-cqng.onrender.com/api/order"),
+          axios.get("https://hotel-cqng.onrender.com/api/table"),
         ]);
 
         setOrders(ordersResponse.data || []);
