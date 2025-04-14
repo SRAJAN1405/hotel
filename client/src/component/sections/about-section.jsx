@@ -43,13 +43,10 @@ const AboutSection = () => {
     },
   };
 
-  // Removed buttonVariants since it's no longer needed
-
   return (
     <section className="py-24 bg-gradient-to-br from-[#3C2F2F] to-[#2E2525] relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(207,143,45,0.1),transparent_70%)] pointer-events-none" />
       <div className="container mx-auto px-4">
-        {/* First Content Block (Our Legacy) - Image on Right */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
           <motion.div
             className="text-center lg:text-left"
@@ -91,7 +88,6 @@ const AboutSection = () => {
                 +80 (400) 123 4567
               </a>
             </motion.div>
-            {/* Removed motion.div wrapper and buttonVariants */}
             <Button
               color="warning"
               variant="solid"
@@ -132,7 +128,6 @@ const AboutSection = () => {
           </div>
         </div>
 
-        {/* Second Content Block (Our Craftsmanship) - Image on Left */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <motion.div
@@ -200,7 +195,6 @@ const AboutSection = () => {
                 +80 (400) 987 6543
               </a>
             </motion.div>
-            {/* Removed motion.div wrapper and buttonVariants */}
             <Button
               color="warning"
               variant="solid"

@@ -39,6 +39,7 @@ export const AdminPanel = () => {
       setIsLoading(true);
       try {
         const [ordersResponse, reservationsResponse] = await Promise.all([
+          //new Promise , resolves when all the Promises in the array resolve.
           axios.get("https://hotel-cqng.onrender.com/api/order"),
           axios.get("https://hotel-cqng.onrender.com/api/table"),
         ]);
