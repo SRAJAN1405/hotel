@@ -10,6 +10,7 @@ import { debounce } from "lodash";
 
 // Functional Error Boundary
 function ErrorBoundary({ children }) {
+  //Its purpose is to monitor the rendering of children and catch any errors that occur during their rendering or lifecycle.
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const useCartStore = create(
     (set, get) => ({
       items: [],
       addToCart: debounce((item, setActiveTab) => {
+        //Uses debounce from Lodash to limit the frequency of the action to once every 300ms, preventing rapid successive calls (e.g., from multiple clicks).
         set((state) => {
           const existingItem = state.items.find((i) => i.id === item.id);
           const updatedItems = existingItem
@@ -147,7 +149,7 @@ function MenuAndCart() {
 
     async function fetchMenu() {
       try {
-        const cached = localStorage.getItem(CACHE_KEY);
+        const cached = localStorage.getItem(CACHE_KEY); //This code checks if we already have saved menu data (like a list of dishes) stored in the browser’s memory (called localStorage). If the saved data is recent enough, it uses that instead of asking the server again which saves time...
         if (cached) {
           const { data, timestamp } = JSON.parse(cached);
           if (Date.now() - timestamp < CACHE_DURATION) {
@@ -205,24 +207,6 @@ function MenuAndCart() {
     return () => controller.abort();
   }, []);
 
-  // Handle redirect
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const orderId = params.get("order_id");
-    const status = params.get("status");
-
-    if (orderId && status) {
-      if (status === "success") {
-        clearCart();
-        toast.success("Payment successful! Order confirmed.");
-        setActiveTab("menu");
-      } else if (status === "failed" || status === "cancelled") {
-        toast.error("Payment failed. Please try again.");
-      }
-      window.history.replaceState({}, "", "/menu");
-    }
-  }, [location, clearCart]);
-
   // Payment handler
   async function handlePayment() {
     if (!isCashfreeLoaded || loadingPayment) {
@@ -248,14 +232,15 @@ function MenuAndCart() {
         "https://hotel-cqng.onrender.com/api/order/create-order",
         cartData,
         { timeout: 5000 }
-      );
+      ); //sets a 5-second timeout. If the server doesn’t respond within 5 seconds, the request fails with a timeout error.
 
       const { payment_session_id, order_id } = data;
       const cashfree = window.Cashfree({ mode: "sandbox" });
 
       cashfree.checkout({
+        //initiates a redirect to the Cashfree payment gateway's user interface (UI), where the payment process is handled.
         paymentSessionId: payment_session_id,
-        redirect: true,
+        redirect: true, //If redirect: false were used, the Cashfree SDK would render the payment UI within your application (e.g., in a modal or container)
       });
 
       pollPaymentStatus(order_id);
@@ -267,56 +252,7 @@ function MenuAndCart() {
     }
   }
 
-  // Poll payment status
-  function pollPaymentStatus(order_id) {
-    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
 
-    pollIntervalRef.current = setInterval(async () => {
-      try {
-        const { data } = await axios.get(
-          `https://hotel-cqng.onrender.com/api/order/status/${order_id}`,
-          { timeout: 2000 }
-        );
-
-        if (data.status === "confirmed") {
-          clearCart();
-          toast.success("Payment successful! Order confirmed.");
-          setActiveTab("menu");
-          setLoadingPayment(false);
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-        } else if (data.status === "cancelled" || data.status === "failed") {
-          toast.error("Payment failed or cancelled.");
-          setLoadingPayment(false);
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-        }
-      } catch (error) {
-        console.error("Polling error:", error);
-        toast.error("Error checking payment status.");
-        setLoadingPayment(false);
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    }, 2000);
-
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    };
-  }
-
-  // Cleanup effect
-  useEffect(() => {
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    };
-  }, []);
 
   return (
     <ErrorBoundary>

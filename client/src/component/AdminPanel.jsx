@@ -40,7 +40,7 @@ export const AdminPanel = () => {
       try {
         const [ordersResponse, reservationsResponse] = await Promise.all([
           //new Promise , resolves when all the Promises in the array resolve.
-          axios.get("https://hotel-cqng.onrender.com/api/order"),
+          axios.get("https://hotel-cqng.onrender.com/api/order"), //Encapsulates the API calls and state updates in a reusable block.
           axios.get("https://hotel-cqng.onrender.com/api/table"),
         ]);
 
