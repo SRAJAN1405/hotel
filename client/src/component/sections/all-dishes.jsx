@@ -242,7 +242,6 @@ function MenuAndCart() {
         paymentSessionId: payment_session_id,
         redirect: true, //If redirect: false were used, the Cashfree SDK would render the payment UI within your application (e.g., in a modal or container)
       });
-
     } catch (error) {
       console.error("Payment error:", error);
       toast.error("Payment failed. Please try again.");
@@ -250,57 +249,6 @@ function MenuAndCart() {
       setLoadingPayment(false);
     }
   }
-
-  // Poll payment status
-  function pollPaymentStatus(order_id) {
-    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
-
-    pollIntervalRef.current = setInterval(async () => {
-      try {
-        const { data } = await axios.get(
-          `https://hotel-cqng.onrender.com/api/order/status/${order_id}`,
-          { timeout: 2000 }
-        );
-
-        if (data.status === "confirmed") {
-          clearCart();
-          toast.success("Payment successful! Order confirmed.");
-          setActiveTab("menu");
-          setLoadingPayment(false);
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-        } else if (data.status === "cancelled" || data.status === "failed") {
-          toast.error("Payment failed or cancelled.");
-          setLoadingPayment(false);
-          clearInterval(pollIntervalRef.current);
-          pollIntervalRef.current = null;
-        }
-      } catch (error) {
-        console.error("Polling error:", error);
-        toast.error("Error checking payment status.");
-        setLoadingPayment(false);
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    }, 2000);
-
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    };
-  }
-
-  // Cleanup effect
-  useEffect(() => {
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    };
-  }, []);
 
   return (
     <ErrorBoundary>
