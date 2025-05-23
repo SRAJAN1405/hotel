@@ -222,10 +222,10 @@ function MenuAndCart() {
         items: items.map((item) => ({
           id: item.id,
           name: item.name,
-          price: parseFloat(item.price.replace("₹", "") || 0),
+          price: parseFloat(item.price.replace("$", "") || 0),
           quantity: item.quantity,
         })),
-        total: total() + 40,
+        total: total() + 4,
       };
 
       const { data } = await axios.post(
@@ -449,16 +449,16 @@ function MenuAndCart() {
                         <div className="space-y-4 mb-6">
                           <div className="flex justify-between text-white/80">
                             <span>Subtotal</span>
-                            <span>₹{total().toFixed(2)}</span>
+                            <span>${total().toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between text-white/80">
                             <span>Delivery</span>
-                            <span>₹40.00</span>
+                            <span>$4.00</span>
                           </div>
                           <div className="border-t border-[#FFD700]/30 pt-4">
                             <div className="flex justify-between text-[#FFD700] font-bold text-lg">
                               <span>Total</span>
-                              <span>₹{(total() + 40).toFixed(2)}</span>
+                              <span>${(total() + 4).toFixed(2)}</span>
                             </div>
                           </div>
                         </div>
