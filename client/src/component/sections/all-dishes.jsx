@@ -95,7 +95,7 @@ const useCartStore = create(
       total: () =>
         get().items.reduce(
           (sum, item) =>
-            sum + parseFloat(item.price.replace("₹", "") || 0) * item.quantity,
+            sum + parseFloat(item.price.replace("$", "") || 0) * item.quantity,
           0
         ),
       clearCart: () => set({ items: [] }),
